@@ -1,0 +1,133 @@
+Running the Project from Zero
+1. Open the project
+
+Open the project folder:
+
+olist-mlops/
+
+Open a terminal in the project root.
+
+2. Create the virtual environment
+
+If the virtual environment does not already exist:
+
+python -m venv .venv
+3. Activate the virtual environment
+
+On Windows PowerShell:
+
+.venv\Scripts\Activate.ps1
+
+The terminal should then show:
+
+(.venv)
+4. Install the dependencies
+
+Install all required packages:
+
+pip install -r requirements.txt
+5. Start Jupyter
+
+Start Jupyter Notebook:
+
+jupyter notebook
+
+Use the project environment as the notebook kernel.
+
+The Python executable should be:
+
+olist-mlops\.venv\Scripts\python.exe
+
+You can verify the active Python environment inside a notebook with:
+
+import sys
+print(sys.executable)
+6. Check the configuration
+
+The project configuration is stored in:
+
+config.yaml
+
+The current configuration includes:
+
+Database: data/olist.db
+Raw data: data/raw
+Processed data: data/processed
+Models: models
+Model: random_forest
+Trees: 300
+Target: is_late_label
+
+The project uses the configuration file to avoid hard-coding project paths throughout the notebooks.
+
+7. Run the notebooks in order
+
+Run the notebooks sequentially because each stage depends on the output of the previous stage.
+
+The workflow is:
+
+Notebook 1
+    ↓
+Read and join data
+    ↓
+Notebook 2
+    ↓
+Create delivery-late label
+    ↓
+Notebook 3
+    ↓
+Train / validation / test split
+    ↓
+Notebook 4
+    ↓
+Exploratory Data Analysis
+    ↓
+Notebook 5
+    ↓
+Feature engineering and preprocessing
+    ↓
+Notebook 6
+    ↓
+Train, tune, and evaluate the model
+
+Do not randomly run notebooks out of order unless the required input data and variables have already been created.
+
+8. Model
+
+The main model is a Random Forest classifier.
+
+Model: Random Forest
+Number of trees: 300
+Target: is_late_label
+
+The target variable represents whether an order was delivered late:
+
+1 = Late
+0 = On time
+9. Output
+
+Processed datasets are stored under:
+
+data/processed/
+
+Trained models are stored under:
+
+models/
+
+Configuration and project settings are stored in:
+
+config.yaml
+10. Reproducing the project
+
+To reproduce the project on another machine:
+
+Obtain the project files.
+Create the Python virtual environment.
+Activate .venv.
+Install requirements.txt.
+Verify the config.yaml paths.
+Make sure the required data is available.
+Start Jupyter.
+Select the project .venv kernel.
+Run the notebooks in order.
+Check the generated processed data and model files.

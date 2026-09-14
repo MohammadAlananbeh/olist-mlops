@@ -1,0 +1,4 @@
+-r runtime.txt
+
+jupyter==1.1.1
+pytest==8.4.1

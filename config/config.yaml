@@ -1,0 +1,23 @@
+project:
+  name: olist_delivery_prediction
+
+paths:
+  database: data/olist.db
+  raw_data: data/raw
+  processed_data: data/processed
+  models: models
+  notebooks: notebooks
+
+model:
+  name: random_forest
+  n_estimators: 300
+  max_depth: 15
+  random_state: 42
+
+data:
+  target: is_late_label
+
+split:
+  test_size: 0.15
+  validation_size: 0.15
+  random_state: 42
