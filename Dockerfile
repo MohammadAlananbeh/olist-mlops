@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir -r requirements/runtime.txt
 
 
 # Copy only the application and required ML artifacts
-COPY app ./app
+# COPY app ./app
 COPY src ./src
 COPY models ./models
 
