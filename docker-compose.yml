@@ -1,0 +1,28 @@
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: olist-api
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    volumes:
+      # SQLite database
+      - ./data:/app/data
+
+      # Persistent ML artifacts
+      - olist_artifacts:/app/artifacts
+
+    restart: unless-stopped
+
+
+volumes:
+  olist_artifacts:

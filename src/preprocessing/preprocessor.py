@@ -1,9 +1,7 @@
-
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
-
 
 CATEGORICAL_COLUMNS = [
     "order_status",
@@ -23,25 +21,23 @@ def get_feature_columns(X):
 
     categorical_columns = CATEGORICAL_COLUMNS.copy()
 
-    numeric_columns = X.select_dtypes(
-        include=["number"]
-    ).columns.tolist()
+    numeric_columns = X.select_dtypes(include=["number"]).columns.tolist()
 
     return numeric_columns, categorical_columns
 
-# 
-# 
-# 
-# Notice something important:
-    # build_preprocessor() does NOT call .fit().
-    # It only builds the object.
-# So:
-    # preprocessor = build_preprocessor(...)
-# means:
-    # "Create the rules."
-# It does not mean:
-    # "Learn the rules from the data."
 
+#
+#
+#
+# Notice something important:
+# build_preprocessor() does NOT call .fit().
+# It only builds the object.
+# So:
+# preprocessor = build_preprocessor(...)
+# means:
+# "Create the rules."
+# It does not mean:
+# "Learn the rules from the data."
 
 
 def build_preprocessor(numeric_columns, categorical_columns):
@@ -53,47 +49,22 @@ def build_preprocessor(numeric_columns, categorical_columns):
 
     numeric_transformer = Pipeline(
         steps=[
-            (
-                "imputer",
-                SimpleImputer(strategy="median")
-            ),
-            (
-                "scaler",
-                StandardScaler()
-            ),
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
         ]
     )
 
     categorical_transformer = Pipeline(
         steps=[
-            (
-                "imputer",
-                SimpleImputer(
-                    strategy="constant",
-                    fill_value="Unknown"
-                )
-            ),
-            (
-                "encoder",
-                OneHotEncoder(
-                    handle_unknown="ignore"
-                )
-            ),
+            ("imputer", SimpleImputer(strategy="constant", fill_value="Unknown")),
+            ("encoder", OneHotEncoder(handle_unknown="ignore")),
         ]
     )
 
     preprocessor = ColumnTransformer(
         transformers=[
-            (
-                "num",
-                numeric_transformer,
-                numeric_columns
-            ),
-            (
-                "cat",
-                categorical_transformer,
-                categorical_columns
-            ),
+            ("num", numeric_transformer, numeric_columns),
+            ("cat", categorical_transformer, categorical_columns),
         ]
     )
 

@@ -1,4 +1,3 @@
-
 import logging
 from pathlib import Path
 
@@ -30,10 +29,7 @@ def setup_logger(
     log_path = Path(log_file)
     log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    file_handler = logging.FileHandler(
-        log_path,
-        encoding="utf-8"
-    )
+    file_handler = logging.FileHandler(log_path, encoding="utf-8")
     file_handler.setLevel(level)
     file_handler.setFormatter(formatter)
 
@@ -43,14 +39,13 @@ def setup_logger(
     return logger
 
 
-
 # -------------------------------------------------
 
 # Then use it anywhere:
-    # from utils.logger import setup_logger
+# from utils.logger import setup_logger
 
-    # logger = setup_logger()
+# logger = setup_logger()
 
-    # logger.info("Application started")
+# logger.info("Application started")
 # Instead of:
-    # print("Application started")
+# print("Application started")

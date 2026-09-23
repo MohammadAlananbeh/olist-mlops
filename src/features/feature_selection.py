@@ -1,6 +1,4 @@
-
 import pandas as pd
-
 
 TARGET_COLUMN = "is_late_label"
 
@@ -45,14 +43,11 @@ def select_model_features(
     ]
     # below line is used to remove duplicate column names while preserving their original order:
     columns_to_drop = list(dict.fromkeys(columns_to_drop))
-        # dict.fromkeys(columns_to_drop)
-        # creates a dictionary using the list values as dictionary keys.
-        # Because dictionary keys must be unique, duplicates disappear.
-        # list(...) convert the dictionary keys back into a list
+    # dict.fromkeys(columns_to_drop)
+    # creates a dictionary using the list values as dictionary keys.
+    # Because dictionary keys must be unique, duplicates disappear.
+    # list(...) convert the dictionary keys back into a list
 
-    existing_columns = [
-        column for column in columns_to_drop
-        if column in df.columns
-    ]
+    existing_columns = [column for column in columns_to_drop if column in df.columns]
 
     return df.drop(columns=existing_columns)

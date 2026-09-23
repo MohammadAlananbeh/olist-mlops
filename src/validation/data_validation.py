@@ -1,27 +1,25 @@
-
-```python
-"""
-Data validation for the Olist delivery prediction project.
-
-This module validates incoming data before it reaches the ML model.
-
-Great Expectations is not used because the current project environment
-uses Python 3.14, while the required Great Expectations version is not
-compatible with this Python version.
-
-The validation rules implemented here follow the same concepts:
-- Required columns
-- Data types
-- Missing-value rates
-- Allowed categorical values
-- Numeric ranges
-"""
-
 from __future__ import annotations
 
 from typing import Any
 
 import pandas as pd
+
+# """
+# Data validation for the Olist delivery prediction project.
+
+# This module validates incoming data before it reaches the ML model.
+
+# Great Expectations is not used because the current project environment
+# uses Python 3.14, while the required Great Expectations version is not
+# compatible with this Python version.
+
+# The validation rules implemented here follow the same concepts:
+# - Required columns
+# - Data types
+# - Missing-value rates
+# - Allowed categorical values
+# - Numeric ranges
+# """
 
 
 # ---------------------------------------------------------------------------
@@ -177,12 +175,21 @@ RANGE_EXPECTATIONS = {
 # Helper functions
 # ---------------------------------------------------------------------------
 
-def _check_required_columns(df: pd.DataFrame) -> list[dict[str, Any]]:
+
+# def _check_required_columns(df: pd.DataFrame) -> list[dict[str, Any]]:
+def _check_required_columns(
+    df: pd.DataFrame,
+    required_columns: list[str] | None = None,
+) -> list[dict[str, Any]]:
     """Check that all required columns exist."""
 
     results = []
+    columns_to_check = (
+        required_columns if required_columns is not None else REQUIRED_COLUMNS
+    )
 
-    for column in REQUIRED_COLUMNS:
+    # for column in REQUIRED_COLUMNS:
+    for column in columns_to_check:
         passed = column in df.columns
 
         results.append(
@@ -191,9 +198,7 @@ def _check_required_columns(df: pd.DataFrame) -> list[dict[str, Any]]:
                 "column": column,
                 "passed": passed,
                 "details": (
-                    "Column exists"
-                    if passed
-                    else "Required column is missing"
+                    "Column exists" if passed else "Required column is missing"
                 ),
             }
         )
@@ -210,10 +215,9 @@ def _check_data_types(df: pd.DataFrame) -> list[dict[str, Any]]:
         if column not in df.columns:
             continue
 
-        passed = (
-            pd.api.types.is_string_dtype(df[column])
-            or pd.api.types.is_object_dtype(df[column])
-        )
+        passed = pd.api.types.is_string_dtype(
+            df[column]
+        ) or pd.api.types.is_object_dtype(df[column])
 
         results.append(
             {
@@ -223,9 +227,7 @@ def _check_data_types(df: pd.DataFrame) -> list[dict[str, Any]]:
                 "actual": str(df[column].dtype),
                 "passed": passed,
                 "details": (
-                    "Correct string type"
-                    if passed
-                    else "Expected string/object type"
+                    "Correct string type" if passed else "Expected string/object type"
                 ),
             }
         )
@@ -244,9 +246,7 @@ def _check_data_types(df: pd.DataFrame) -> list[dict[str, Any]]:
                 "actual": str(df[column].dtype),
                 "passed": passed,
                 "details": (
-                    "Correct numeric type"
-                    if passed
-                    else "Expected numeric type"
+                    "Correct numeric type" if passed else "Expected numeric type"
                 ),
             }
         )
@@ -303,7 +303,6 @@ def _check_allowed_categories(
     }
 
     for column, allowed_values in categorical_expectations.items():
-
         if column not in df.columns:
             continue
 
@@ -322,8 +321,7 @@ def _check_allowed_categories(
                 "details": (
                     "All values are allowed"
                     if passed
-                    else f"Invalid values found: "
-                    f"{sorted(invalid_values)}"
+                    else f"Invalid values found: {sorted(invalid_values)}"
                 ),
             }
         )
@@ -339,7 +337,6 @@ def _check_non_negative_values(
     results = []
 
     for column in NON_NEGATIVE_COLUMNS:
-
         if column not in df.columns:
             continue
 
@@ -373,17 +370,13 @@ def _check_ranges(df: pd.DataFrame) -> list[dict[str, Any]]:
     results = []
 
     for column, (minimum, maximum) in RANGE_EXPECTATIONS.items():
-
         if column not in df.columns:
             continue
 
         if not pd.api.types.is_numeric_dtype(df[column]):
             continue
 
-        invalid_mask = (
-            (df[column] < minimum)
-            | (df[column] > maximum)
-        )
+        invalid_mask = (df[column] < minimum) | (df[column] > maximum)
 
         invalid_count = int(invalid_mask.fillna(False).sum())
 
@@ -399,10 +392,7 @@ def _check_ranges(df: pd.DataFrame) -> list[dict[str, Any]]:
                 "details": (
                     "All values are within expected range"
                     if passed
-                    else (
-                        f"{invalid_count} values are outside "
-                        f"the expected range"
-                    )
+                    else (f"{invalid_count} values are outside the expected range")
                 ),
             }
         )
@@ -414,8 +404,14 @@ def _check_ranges(df: pd.DataFrame) -> list[dict[str, Any]]:
 # Main validation function
 # ---------------------------------------------------------------------------
 
+# def validate_input_data(
+#     df: pd.DataFrame,
+# ) -> dict[str, Any]:
+
+
 def validate_input_data(
     df: pd.DataFrame,
+    required_columns: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Validate incoming data before it reaches the ML model.
@@ -442,7 +438,8 @@ def validate_input_data(
     results = []
 
     # 1. Required columns
-    results.extend(_check_required_columns(df))
+    # results.extend(_check_required_columns(df))
+    results.extend(_check_required_columns(df, required_columns))
 
     # Only continue with other checks for columns that actually exist.
     results.extend(_check_data_types(df))
@@ -451,13 +448,9 @@ def validate_input_data(
     results.extend(_check_non_negative_values(df))
     results.extend(_check_ranges(df))
 
-    passed_checks = sum(
-        1 for result in results if result["passed"]
-    )
+    passed_checks = sum(1 for result in results if result["passed"])
 
-    failed_checks = sum(
-        1 for result in results if not result["passed"]
-    )
+    failed_checks = sum(1 for result in results if not result["passed"])
 
     success = failed_checks == 0
 
@@ -474,21 +467,29 @@ def validate_input_data(
 # Convenience function
 # ---------------------------------------------------------------------------
 
-def validate_or_raise(df: pd.DataFrame) -> None:
+# def validate_or_raise(df: pd.DataFrame) -> None:
+
+
+def validate_or_raise(
+    df: pd.DataFrame,
+    required_columns: list[str] | None = None,
+) -> None:
     """
     Validate data and reject it if validation fails.
 
     This is the function that can be called before prediction.
     """
 
-    validation_result = validate_input_data(df)
+    # validation_result = validate_input_data(df)
+
+    validation_result = validate_input_data(
+        df,
+        required_columns=required_columns,
+    )
 
     if not validation_result["success"]:
-
         failed = [
-            result
-            for result in validation_result["results"]
-            if not result["passed"]
+            result for result in validation_result["results"] if not result["passed"]
         ]
 
         messages = [
@@ -500,10 +501,6 @@ def validate_or_raise(df: pd.DataFrame) -> None:
             for result in failed
         ]
 
-        error_message = (
-            "Input data validation failed:\n"
-            + "\n".join(messages)
-        )
+        error_message = "Input data validation failed:\n" + "\n".join(messages)
 
         raise ValueError(error_message)
-```

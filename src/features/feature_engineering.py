@@ -1,6 +1,4 @@
-
 import pandas as pd
-
 
 DATE_COLUMNS = [
     "order_purchase_timestamp",
@@ -40,36 +38,24 @@ def create_date_features(df):
     df = convert_date_columns(df)
 
     # Purchase date features
-    df["purchase_year"] = (
-        df["order_purchase_timestamp"].dt.year
-    )
+    df["purchase_year"] = df["order_purchase_timestamp"].dt.year
 
-    df["purchase_month"] = (
-        df["order_purchase_timestamp"].dt.month
-    )
+    df["purchase_month"] = df["order_purchase_timestamp"].dt.month
 
-    df["purchase_day"] = (
-        df["order_purchase_timestamp"].dt.day
-    )
+    df["purchase_day"] = df["order_purchase_timestamp"].dt.day
 
-    df["purchase_dayofweek"] = (
-        df["order_purchase_timestamp"].dt.dayofweek
-    )
+    df["purchase_dayofweek"] = df["order_purchase_timestamp"].dt.dayofweek
 
-    df["purchase_hour"] = (
-        df["order_purchase_timestamp"].dt.hour
-    )
+    df["purchase_hour"] = df["order_purchase_timestamp"].dt.hour
 
     # Estimated delivery duration
     df["estimated_delivery_days"] = (
-        df["order_estimated_delivery_date"]
-        - df["order_purchase_timestamp"]
+        df["order_estimated_delivery_date"] - df["order_purchase_timestamp"]
     ).dt.total_seconds() / 86400
 
     # Approval delay
     df["approval_delay_hours"] = (
-        df["order_approved_at"]
-        - df["order_purchase_timestamp"]
+        df["order_approved_at"] - df["order_purchase_timestamp"]
     ).dt.total_seconds() / 3600
 
     return df

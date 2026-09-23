@@ -19,3 +19,11 @@ Thumbs.db
 logs/
 *.log
 
+
+.env
+mlflow.db
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+

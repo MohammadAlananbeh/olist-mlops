@@ -1,0 +1,49 @@
+
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Notebooks
+notebooks/
+
+# Git
+.git/
+.gitignore
+
+# Local environment/secrets
+.env
+
+# Raw and processed datasets
+data/raw/
+data/processed/
+
+# SQLite database
+data/*.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+logs/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# DVC cache
+.dvc/cache/
