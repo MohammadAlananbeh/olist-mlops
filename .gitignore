@@ -10,7 +10,7 @@ data/raw/
 data/processed/
 data/*.db
 
-models/*.joblib
+# models/*.joblib
 
 .DS_Store
 Thumbs.db
