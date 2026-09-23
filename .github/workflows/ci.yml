@@ -10,8 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+        lfs: true
+
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -48,8 +54,13 @@ jobs:
     needs: test
 
     steps:
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
+
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+        lfs: true
 
       - name: Build Docker image
         run: |
