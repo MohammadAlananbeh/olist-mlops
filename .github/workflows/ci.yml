@@ -16,8 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-        lfs: true
-
+          lfs: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,7 +34,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements/runtime.txt
           pip install ruff pytest
-
 
       - name: Lint
         run: |
@@ -60,7 +58,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-        lfs: true
+          lfs: true
 
       - name: Build Docker image
         run: |
